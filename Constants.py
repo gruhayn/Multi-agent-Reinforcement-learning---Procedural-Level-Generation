@@ -10,10 +10,18 @@ class CellTypes(IntEnum):
     Coin = 3
     Agent = 4
 
+
     
+
 class ErrorCodes(IntEnum):
     AgentDoesntHaveThisMechanic = 1
+    AgentNotInGame = 2
+    AgentOnBomb = 3
+    AgentIsDead = 4
+    GameIsOver = 5
     
 class ResultCodes(IntEnum):
     Success = 1
     Error = 2
+    
+    

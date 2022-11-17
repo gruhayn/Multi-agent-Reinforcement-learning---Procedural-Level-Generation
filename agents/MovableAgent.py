@@ -10,7 +10,7 @@ from agents.IMovableAgent import IMovableAgent
 
 class MovableAgent(Agent, IMovableAgent):
     
-    def __init__(self, teamId, mechanics = None, xPosition = None, yPosition = None, zPosition = None, name = None):
-        Agent.__init__(self, teamId, mechanics, xPosition, yPosition, zPosition, name)
+    def __init__(self, teamId, mechanics = None, position = [None, None, None], name = None):
+        Agent.__init__(self, teamId, mechanics, position, name)
         IMovableAgent.__init__(self)
 

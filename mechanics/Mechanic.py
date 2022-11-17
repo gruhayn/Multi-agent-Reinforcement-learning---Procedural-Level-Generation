@@ -23,3 +23,10 @@ class Mechanic(object):
 
         return self.mechanicUUID == other.mechanicUUID
     
+        
+        
+        
+        
+        
+        
+        
