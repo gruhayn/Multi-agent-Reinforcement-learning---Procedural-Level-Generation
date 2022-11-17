@@ -15,9 +15,9 @@ class CellTypes(IntEnum):
 
 class ErrorCodes(IntEnum):
     AgentDoesntHaveThisMechanic = 1
-    AgentNotInGame = 2
+    AgentNotInGame = 2 # is same with agent is dead and agent havent been in game ever
     AgentOnBomb = 3
-    AgentIsDead = 4
+    AgentExitedBoard = 4
     GameIsOver = 5
     
 class ResultCodes(IntEnum):

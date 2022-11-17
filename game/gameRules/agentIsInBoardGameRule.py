@@ -26,7 +26,7 @@ class AgentIsInBoardGameRule(GameRule, ICheckAfterMechanicExecutedGameRule):
         data.agent.die()
         data.game.setCellAsEmptyCell(data.agent.prevAgent.xPosition, 
                                      data.agent.prevAgent.yPosition)
-        return ResultCodes.Error, ErrorCodes.AgentNotInGame
+        return ResultCodes.Error, ErrorCodes.AgentExitedBoard
 
     def __postMethodOnSuccess(self, data):
         return self.applyAfterMechanicEffects(data)
