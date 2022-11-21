@@ -27,8 +27,8 @@ goD = GoUpMechanic(-1)
 
 
 agent1 = MovableAgent(1, [goU, goR, goL, goD], [1,1 ,None], "A" )
-agent2 = MovableAgent(2, [goU, goR], [2,2,None], "I" )
-agent3 = MovableAgent(1, [goU], [2,1 ,None], "K" )
+agent2 = MovableAgent(2, [goU, goR, goL, goD], [2,3,None], "I" )
+agent3 = MovableAgent(1, [goU, goR, goL, goD], [2,1 ,None], "K" )
 
 agentIsInBoardGameRule = AgentIsInBoardGameRule()
 agentOnAnotherAgentGameRule = AgentOnAnotherAgentGameRule()
@@ -46,6 +46,7 @@ cellMaker = CellMaker()
 
 predefinedCoinCells = [
     cellMaker.createCoinCell([1,2]),
+    cellMaker.createCoinCell([1,3]),
     cellMaker.createCoinCell([2,4])
     ]
 
@@ -73,21 +74,33 @@ a = Game([agent1, agent2, agent3],
 
 result, message = None, None
 
-while True:
+while not a.isOver():
     print("--------------------------------")
     
-    a.printBoardWithAgents(True)
+    a.printBoardWithAgents(False)
     print(result, message)
     print(a.agentUUIDToGatheredCoinValueDict)
     print("won",a.whichTeamWon())
-    where = input("where?")
+    
 
-    if where == "w":
-        result, message = a.playForAgent(agent1, goU)
-    elif where == "s":
-        result, message = a.playForAgent(agent1, goD)
-    elif where == "a":
-        result, message = a.playForAgent(agent1, goL)
-    elif where == "d":
-        result, message = a.playForAgent(agent1, goR)
-        
+    agent = a.getNextPlayingAgent()
+    
+    print(agent.name)
+    for i, m in enumerate(agent.mechanics):
+        print("{0} index > {1}".format(i, m.getMechanicName()))
+    
+    where = input("where?")
+    
+    result, message = a.playForAgent(agent, agent.mechanics[int(where)])
+   
+
+
+print("--------------------------------")
+print("--------------------------------")
+print("--------------------------------")
+print("--------------------------------")
+
+a.printBoardWithAgents(False)
+print(result, message)
+print(a.agentUUIDToGatheredCoinValueDict)
+print("won",a.whichTeamWon())       

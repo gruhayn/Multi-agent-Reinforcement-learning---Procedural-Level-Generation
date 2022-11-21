@@ -9,9 +9,10 @@ import uuid
 
 class Mechanic(object):
     
-    def __init__(self, mechanicTypeId):
+    def __init__(self, mechanicTypeId, name):
         self.mechanicTypeId = mechanicTypeId
         self.mechanicUUID = uuid.uuid4().hex
+        self.name = name
         
     def do(self, agent):
         raise NotImplementedError()
@@ -23,6 +24,8 @@ class Mechanic(object):
 
         return self.mechanicUUID == other.mechanicUUID
     
+    def getMechanicName(self):
+        return self.name
         
         
         

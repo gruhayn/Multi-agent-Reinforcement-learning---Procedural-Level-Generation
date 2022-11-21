@@ -10,7 +10,8 @@ from Constants import MechanicTypes
 
 class GoUpMechanic(Mechanic):
     def __init__(self, stepCount = None):
-        Mechanic.__init__(self, MechanicTypes.GoUp)
+        name = f'{GoUpMechanic=}'.split('=')[0] + str(stepCount)
+        Mechanic.__init__(self, MechanicTypes.GoUp, name)
         self.stepCount = stepCount if stepCount is not None else 1 
         
     def do(self, agent):

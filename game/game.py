@@ -29,6 +29,9 @@ class Game():
         self.cellMaker = cellMaker
         self.agentUUIDToGatheredCoinValueDict = {agent.UUID:0 for agent in agents}
         
+        self.agentsPlayingOrder = [agent for agent in agents]
+        self.agentsPlayingOrderIndex = 0 
+        
         self.teamIdToGatheredCoinValueDict = {}
         for agent in agents:
             val = self.teamIdToGatheredCoinValueDict.get(agent.teamId)
@@ -44,7 +47,6 @@ class Game():
                 self.teamToAgents[agent.teamId] = [agent.UUID]
             else:
                 self.teamToAgents[agent.teamId] = val + [agent.UUID]
-        
         
         
         if gameRules is not None:
@@ -63,6 +65,23 @@ class Game():
         self.__isOver = False
         
         self.__createBoard(predefinedCoinCells, predefinedBombCells)   
+     
+    
+    def changeAgentPlayingOrderIndex(self):
+        self.agentsPlayingOrderIndex = (self.agentsPlayingOrderIndex + 1) % len(self.agentsPlayingOrder)
+     
+    def getNextPlayingAgent(self):
+        if not self.isOver():
+             agent = self.agentsPlayingOrder[self.agentsPlayingOrderIndex]
+             
+             while agent.isAgentDead():
+                 self.changeAgentPlayingOrderIndex()
+                 agent = self.agentsPlayingOrder[self.agentsPlayingOrderIndex]
+                   
+             return agent   
+        else:
+            return None
+         
         
     def isOver(self):
         if not self.__isOver:
@@ -111,6 +130,8 @@ class Game():
                     if value > coinCount:
                         coinCount = value
                         wonTeamId = key
+                    elif value == coinCount and wonTeamId is not None:
+                        wonTeamId = None
                 
                 return wonTeamId
                 
@@ -264,11 +285,12 @@ class Game():
         resultCode, errorCode = self.__playForAgentWithoutAgentExistenceCheck(agent, mechanic)
         return resultCode, errorCode
       
-    def __playForAgentWithoutAgentExistenceCheck(self, agent, mechanic):
+    def __playForAgentWithoutAgentExistenceCheck(self, agent, mechanic, changePlayingOrder = True):
         resultCode = ResultCodes.Success
         
         self.__createRequiredDataForAllGameRules(agent)
         
+        #resultCode = ResultCodes.Success must be success before every preGameRule
         for preGameRule in self.preGameRules:
             if resultCode is ResultCodes.Success:
                 resultCode, errorCode = preGameRule.checkRule(self.requiredDataForAllGameRules)
@@ -278,10 +300,13 @@ class Game():
     
         if resultCode == ResultCodes.Success:
             self.__createRequiredDataForAllGameRules(agent)
-            resultCode = ResultCodes.Success
+            
+            #resultCode = ResultCodes.Success must be success before every postGameRule
             for postGameRule in self.postGameRules:
                 if resultCode is ResultCodes.Success:
                     resultCode, errorCode = postGameRule.checkRule(self.requiredDataForAllGameRules)
+        if changePlayingOrder:
+            self.changeAgentPlayingOrderIndex()
                 
         return resultCode, errorCode
       
